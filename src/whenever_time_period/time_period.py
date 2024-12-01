@@ -37,8 +37,20 @@ class LinearTimePeriod(TimePeriod):
 
     @dispatch
     def __and__(self, other: ModularTimePeriod) -> Any:  # noqa F811
-        print("foo")
-        raise NotImplementedError
+        # two regions of possible intersection, [max(a,c), b] or [a, min(b,d)]
+        # TODO Is it always true that only one OR the other intersection will occur (if any occurs)?
+
+        # region 1
+        if max(self.start_time, other.start_time) < self.end_time:
+            return LinearTimePeriod(
+                max(self.start_time, other.start_time), self.end_time
+            )
+
+        # region 2
+        if self.start_time < min(self.end_time, other.end_time):
+            return LinearTimePeriod(self.start_time, min(self.end_time, other.end_time))
+
+        return None
 
     @dispatch
     def __and__(self, other: InfiniteTimePeriod) -> Any:  # noqa F811

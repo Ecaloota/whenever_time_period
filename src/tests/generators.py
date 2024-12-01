@@ -188,12 +188,13 @@ class Generators:
             funcargs=cases,
         )
 
-    def time_period_finite_non_wrapped_intersection_cases() -> ParametrizedArgs:
-        """Generate relevant cases to assert the correctness of the intersection between two
-        valid finite TimePeriod instances that do not wrap around MIDNIGHT.
+    def time_period_linear_intersection_cases() -> ParametrizedArgs:
+        """Generate relevant cases to assert the correctness of the intersections between two TimePeriods,
+        where at least the first TimePeriod is a LinearTimePeriod
 
         Relevant cases are:
 
+        1. Linear
         1.1. No intersection
             |-----|     |-----|
 
@@ -216,9 +217,91 @@ class Generators:
         1.6. Left-touching intersection (no intersection)
             |-----|
         |---|
+
+        2. Modular
+        2.1 Total disjoint
+            |---|
+        ----|   |----
+
+        2.2 Left overhang
+              |----|
+        ----|   |----
+
+        2.3 Right overhang
+         |----|
+        ----|   |----
+
+        2.4 Complete overlap
+              |---|
+        -|   |-------
+
+        3. Infinite
+        3.1 Infinite case
+            |---|
+        -----|-----
         """
 
-        pass
+        cases = [
+            (  # 1.1.
+                LinearTimePeriod(Time(5), Time(10)),
+                LinearTimePeriod(Time(12), Time(15)),
+                None,
+            ),
+            (  # 1.2.
+                LinearTimePeriod(Time(5), Time(10)),
+                LinearTimePeriod(Time(8), Time(12)),
+                LinearTimePeriod(Time(8), Time(10)),
+            ),
+            (  # 1.3.
+                LinearTimePeriod(Time(8), Time(12)),
+                LinearTimePeriod(Time(5), Time(10)),
+                LinearTimePeriod(Time(8), Time(10)),
+            ),
+            (  # 1.4.
+                LinearTimePeriod(Time(8), Time(10)),
+                LinearTimePeriod(Time(8), Time(10)),
+                LinearTimePeriod(Time(8), Time(10)),
+            ),
+            (  # 1.5.
+                LinearTimePeriod(Time(8), Time(10)),
+                LinearTimePeriod(Time(10), Time(12)),
+                None,
+            ),
+            (  # 1.6.
+                LinearTimePeriod(Time(10), Time(12)),
+                LinearTimePeriod(Time(8), Time(10)),
+                None,
+            ),
+            (  # 2.1.
+                LinearTimePeriod(Time(5), Time(10)),
+                ModularTimePeriod(Time(10), Time(5)),
+                None,
+            ),
+            (  # 2.2.
+                LinearTimePeriod(Time(5), Time(10)),
+                ModularTimePeriod(Time(7), Time(4)),
+                LinearTimePeriod(Time(7), Time(10)),
+            ),
+            (  # 2.3.
+                LinearTimePeriod(Time(5), Time(10)),
+                ModularTimePeriod(Time(12), Time(7)),
+                LinearTimePeriod(Time(5), Time(7)),
+            ),
+            (  # 2.4.
+                LinearTimePeriod(Time(5), Time(8)),
+                ModularTimePeriod(Time(4), Time(1)),
+                LinearTimePeriod(Time(5), Time(8)),
+            ),
+            (  # 3.1.
+                LinearTimePeriod(Time(5), Time(10)),
+                InfiniteTimePeriod(Time(5), Time(5)),
+                LinearTimePeriod(Time(5), Time(10)),
+            ),
+        ]
+
+        return ParametrizedArgs(
+            argnames=["period_a", "period_b", "expected_intersection"], funcargs=cases
+        )
 
     def time_period_finite_wrapped_intersection_cases() -> ParametrizedArgs:
         """Generate relevant cases to assert the correctness of the intersection between two

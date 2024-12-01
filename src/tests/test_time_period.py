@@ -1,8 +1,7 @@
-from typing import Any
+from typing import Any, Optional
 
 from whenever import Time
 
-# from whenever_time_period import ModularTimePeriod
 from whenever_time_period.abstract import TimePeriod
 from whenever_time_period.time_period import LinearTimePeriod, ModularTimePeriod
 
@@ -38,7 +37,12 @@ class TestTimePeriod:
         for idx, np in enumerate(normed):
             assert expected_periods[idx] == np
 
-    def test_foo(self):
-        a = LinearTimePeriod(Time(5), Time(10))
-        b = ModularTimePeriod(Time(10), Time(5))
-        a & b
+    def test_time_period_linear_intersection_cases(
+        self,
+        period_a: LinearTimePeriod,
+        period_b: TimePeriod,
+        expected_intersection: Optional[LinearTimePeriod],
+    ) -> None:
+        """TODO"""
+
+        assert (period_a & period_b) == expected_intersection
