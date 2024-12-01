@@ -147,47 +147,6 @@ class Generators:
             argnames=["period", "candidate_time", "is_expected_member"], funcargs=cases
         )
 
-    def time_period_normalise_cases() -> ParametrizedArgs:
-        """Generate relevant cases to ensure we correctly normalise all instances of
-        ModularTimePeriod"""
-
-        cases = [
-            (
-                Time(10),
-                Time(5),
-                [
-                    LinearTimePeriod(Time.MIDNIGHT, Time(5)),
-                    LinearTimePeriod(Time(10), Time.MAX),
-                ],
-            ),
-            (
-                Time.MAX,
-                Time(5),
-                [
-                    LinearTimePeriod(Time.MIDNIGHT, Time(5)),
-                    Time.MAX,
-                ],
-            ),
-            (
-                Time(5),
-                Time.MIDNIGHT,
-                [
-                    Time.MIDNIGHT,
-                    LinearTimePeriod(Time(5), Time.MAX),
-                ],
-            ),
-            (
-                Time.MAX,
-                Time.MIDNIGHT,
-                [Time.MAX],
-            ),
-        ]
-
-        return ParametrizedArgs(
-            argnames=["start_time", "end_time", "expected_periods"],
-            funcargs=cases,
-        )
-
     def time_period_linear_intersection_cases() -> ParametrizedArgs:
         """Generate relevant cases to assert the correctness of the intersections between two TimePeriods,
         where at least the first TimePeriod is a LinearTimePeriod

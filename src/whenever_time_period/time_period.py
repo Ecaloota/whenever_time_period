@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Optional
 
 from plum import dispatch
 from whenever import Time
@@ -36,7 +36,7 @@ class LinearTimePeriod(TimePeriod):
         return None
 
     @dispatch
-    def __and__(self, other: ModularTimePeriod) -> Any:  # noqa F811
+    def __and__(self, other: ModularTimePeriod) -> Optional[LinearTimePeriod]:  # noqa F811
         # two regions of possible intersection, [max(a,c), b] or [a, min(b,d)]
         # TODO Is it always true that only one OR the other intersection will occur (if any occurs)?
 
@@ -53,19 +53,8 @@ class LinearTimePeriod(TimePeriod):
         return None
 
     @dispatch
-    def __and__(self, other: InfiniteTimePeriod) -> Any:  # noqa F811
-        print("wowo")
-        raise NotImplementedError
-
-    # def normalise(self) -> list[TimePeriod]:
-    #     """Normalise a LinearTimePeriod into constituent TimePeriod(s) such that each period
-    #     has start_time < end_time.
-
-    #     Example:
-    #     >> LinearTimePeriod(Time(5), Time(10)).normalise()
-    #     >> [LinearTimePeriod(Time(5), Time(10))]
-    #     """
-    #     return [self]
+    def __and__(self, other: InfiniteTimePeriod) -> LinearTimePeriod:  # noqa F811
+        return self
 
 
 @dataclass
@@ -85,46 +74,17 @@ class ModularTimePeriod(TimePeriod):
     def __contains__(self, other: Time) -> bool:
         return self.start_time <= other or other < self.end_time
 
-    def __and__(self, other: TimePeriod) -> TimePeriod | None:
+    @dispatch
+    def __and__(self, other: LinearTimePeriod) -> Optional[LinearTimePeriod]:
         raise NotImplementedError
 
-    def normalise(self) -> list[Time | TimePeriod]:
-        """Normalise a ModularTimePeriod into constituent LinearTimePeriod(s).
+    @dispatch
+    def __and__(self, other: ModularTimePeriod) -> ModularTimePeriod:  # noqa F811
+        raise NotImplementedError
 
-        Example:
-        # start_time > end_time
-        >> ModularTimePeriod(Time(10), Time(5)).normalise()
-        >> [LinearTimePeriod(Time.MIDNIGHT, Time(5)), LinearTimePeriod(Time(10), Time.MAX)]
-
-        # Special case 1: start_time == Time.MAX
-        >> ModularTimePeriod(Time.MAX, Time(5)).normalise()
-        >> [LinearTimePeriod(Time.MIDNIGHT, Time(5)), Time.MAX]
-
-        # Special case 2: end_time == Time.MIDNIGHT
-        >> ModularTimePeriod(Time(5), Time.MIDNIGHT).normalise()
-        >> [LinearTimePeriod(Time(5), Time.MAX), Time.MAX]
-
-        # Special case 3: start_time == Time.MAX and end_time == Time.MIDNIGHT
-        >> ModularTimePeriod(Time.MAX, Time.MIDNIGHT).normalise()
-        >> [Time.MAX]
-        """
-
-        # Special case 3
-        if self.start_time == Time.MAX and self.end_time == Time.MIDNIGHT:
-            return [Time.MAX]
-
-        p1 = (
-            LinearTimePeriod(self.start_time, Time.MAX)
-            if self.start_time != Time.MAX
-            else Time.MAX
-        )
-        p2 = (
-            LinearTimePeriod(Time.MIDNIGHT, self.end_time)
-            if self.end_time != Time.MIDNIGHT
-            else Time.MIDNIGHT
-        )
-
-        return sorted([p1, p2])
+    @dispatch
+    def __and__(self, other: InfiniteTimePeriod) -> ModularTimePeriod:  # noqa F811
+        raise NotImplementedError
 
 
 @dataclass
@@ -142,15 +102,14 @@ class InfiniteTimePeriod(TimePeriod):
             return False
         return True
 
-    def __and__(self, other: TimePeriod) -> Optional[TimePeriod]:
+    @dispatch
+    def __and__(self, other: LinearTimePeriod) -> LinearTimePeriod:
         raise NotImplementedError
 
-    # def normalise(self) -> list[TimePeriod]:
-    #     """Normalise an InfiniteTimePeriod into constituent TimePeriod(s).
-    #     Calling normalise on an InfiniteTimePeriod returns the InfiniteTimePeriod centered at Time.MIDNIGHT.
+    @dispatch
+    def __and__(self, other: ModularTimePeriod) -> ModularTimePeriod:  # noqa F811
+        raise NotImplementedError
 
-    #     Example:
-    #     >> InfiniteTimePeriod(Time(10), Time(10))
-    #     >> [InfiniteTimePeriod(Time.MIDNIGHT, Time.MIDNIGHT)]
-    #     """
-    #     return [InfiniteTimePeriod(Time.MIDNIGHT, Time.MIDNIGHT)]
+    @dispatch
+    def __and__(self, other: InfiniteTimePeriod) -> InfiniteTimePeriod:  # noqa F811
+        raise NotImplementedError
