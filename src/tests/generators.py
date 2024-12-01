@@ -6,9 +6,11 @@ import pytest
 from whenever import Time
 
 from tests.utils import TestUtils
-from whenever_time_period.infinite import InfiniteTimePeriod
-from whenever_time_period.linear import LinearTimePeriod
-from whenever_time_period.modular import ModularTimePeriod
+from whenever_time_period.time_period import (
+    InfiniteTimePeriod,
+    LinearTimePeriod,
+    ModularTimePeriod,
+)
 
 
 @dataclass

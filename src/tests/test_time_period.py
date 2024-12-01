@@ -2,8 +2,9 @@ from typing import Any
 
 from whenever import Time
 
-from whenever_time_period.modular import ModularTimePeriod
-from whenever_time_period.time_period import TimePeriod
+# from whenever_time_period import ModularTimePeriod
+from whenever_time_period.abstract import TimePeriod
+from whenever_time_period.time_period import LinearTimePeriod, ModularTimePeriod
 
 
 class TestTimePeriod:
@@ -36,3 +37,8 @@ class TestTimePeriod:
         normed = ModularTimePeriod(start_time, end_time).normalise()
         for idx, np in enumerate(normed):
             assert expected_periods[idx] == np
+
+    def test_foo(self):
+        a = LinearTimePeriod(Time(5), Time(10))
+        b = ModularTimePeriod(Time(10), Time(5))
+        a & b
