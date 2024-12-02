@@ -305,27 +305,46 @@ class Generators:
         """
 
         cases = [
-            (
+            (  # 1.1.
                 ModularTimePeriod(Time(10), Time(5)),
                 LinearTimePeriod(Time(5), Time(10)),
                 None,
             ),
-            (
+            (  # 1.2.
                 ModularTimePeriod(Time(10), Time(5)),
                 LinearTimePeriod(Time(7), Time(12)),
                 LinearTimePeriod(Time(10), Time(12)),
             ),
-            (
+            (  # 1.3.
                 ModularTimePeriod(Time(10), Time(5)),
                 LinearTimePeriod(Time(3), Time(7)),
                 LinearTimePeriod(Time(3), Time(5)),
             ),
-            (
+            (  # 1.4.
                 ModularTimePeriod(Time(10), Time(5)),
                 LinearTimePeriod(Time(11), Time(13)),
                 LinearTimePeriod(Time(11), Time(13)),
             ),
-            # TODO
+            (  # 2.1.
+                ModularTimePeriod(Time(10), Time(5)),
+                ModularTimePeriod(Time(11), Time(4)),
+                ModularTimePeriod(Time(11), Time(4)),
+            ),
+            (  # 2.2.
+                ModularTimePeriod(Time(10), Time(5)),
+                ModularTimePeriod(Time(8), Time(3)),
+                ModularTimePeriod(Time(10), Time(3)),
+            ),
+            (  # 2.3.
+                ModularTimePeriod(Time(10), Time(5)),
+                ModularTimePeriod(Time(12), Time(7)),
+                ModularTimePeriod(Time(12), Time(5)),
+            ),
+            (  # 3.1.
+                ModularTimePeriod(Time(10), Time(5)),
+                InfiniteTimePeriod(Time(11), Time(11)),
+                ModularTimePeriod(Time(10), Time(5)),
+            ),
         ]
 
         return ParametrizedArgs(
@@ -339,15 +358,39 @@ class Generators:
         Relevant cases are:
 
         1. Linear
+        -----|-----
+            |---|
 
         2. Modular
+        -----|-----
+        --|     |--
 
         3. Infinite
-
+        -----|-----
+        -----|-----
         """
 
         cases = [
-            (),
+            (
+                InfiniteTimePeriod(Time(1), Time(1)),
+                LinearTimePeriod(Time(5), Time(8)),
+                LinearTimePeriod(Time(5), Time(8)),
+            ),
+            (
+                InfiniteTimePeriod(Time(1), Time(1)),
+                ModularTimePeriod(Time(8), Time(5)),
+                ModularTimePeriod(Time(8), Time(5)),
+            ),
+            (
+                InfiniteTimePeriod(Time(1), Time(1)),
+                InfiniteTimePeriod(Time(5), Time(5)),
+                InfiniteTimePeriod(Time(5), Time(5)),
+            ),
+            (  # special case, note that InfiniteTimePeriod[1, 1) == InfiniteTimePeriod[5, 5)
+                InfiniteTimePeriod(Time(1), Time(1)),
+                InfiniteTimePeriod(Time(5), Time(5)),
+                InfiniteTimePeriod(Time(1), Time(1)),
+            ),
         ]
 
         return ParametrizedArgs(

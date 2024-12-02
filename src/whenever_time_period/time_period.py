@@ -79,14 +79,16 @@ class ModularTimePeriod(TimePeriod):
         return LinearTimePeriod.__and__(other, self)
 
     @dispatch
-    def __and__(self, other: ModularTimePeriod) -> ModularTimePeriod:  # noqa F811
-        # TODO
-        raise NotImplementedError
+    def __and__(self, other: ModularTimePeriod) -> Optional[ModularTimePeriod]:  # noqa F811
+        start_inter = max(self.start_time, other.start_time)
+        end_inter = min(self.end_time, other.end_time)
+        if start_inter >= end_inter:
+            return ModularTimePeriod(start_inter, end_inter)
+        return None
 
     @dispatch
     def __and__(self, other: InfiniteTimePeriod) -> ModularTimePeriod:  # noqa F811
-        # TODO
-        raise NotImplementedError
+        return self
 
 
 @dataclass
@@ -104,14 +106,19 @@ class InfiniteTimePeriod(TimePeriod):
             return False
         return True
 
+    def __eq__(self, value: object) -> bool:
+        if isinstance(value, InfiniteTimePeriod):
+            return True
+        return False
+
     @dispatch
     def __and__(self, other: LinearTimePeriod) -> LinearTimePeriod:
-        return LinearTimePeriod.__and__(other, self)
+        return other
 
     @dispatch
     def __and__(self, other: ModularTimePeriod) -> ModularTimePeriod:  # noqa F811
-        return ModularTimePeriod.__and__(other, self)
+        return other
 
     @dispatch
     def __and__(self, other: InfiniteTimePeriod) -> InfiniteTimePeriod:  # noqa F811
-        raise NotImplementedError
+        return other

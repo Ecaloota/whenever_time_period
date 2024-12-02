@@ -3,7 +3,11 @@ from typing import Any, Optional
 from whenever import Time
 
 from whenever_time_period.abstract import TimePeriod
-from whenever_time_period.time_period import LinearTimePeriod, ModularTimePeriod
+from whenever_time_period.time_period import (
+    InfiniteTimePeriod,
+    LinearTimePeriod,
+    ModularTimePeriod,
+)
 
 
 class TestTimePeriod:
@@ -40,6 +44,16 @@ class TestTimePeriod:
         period_a: ModularTimePeriod,
         period_b: TimePeriod,
         expected_intersection: Optional[LinearTimePeriod] | ModularTimePeriod,
+    ) -> None:
+        """TODO"""
+
+        assert (period_a & period_b) == expected_intersection
+
+    def test_time_period_infinite_intersection_cases(
+        self,
+        period_a: InfiniteTimePeriod,
+        period_b: TimePeriod,
+        expected_intersection: TimePeriod,
     ) -> None:
         """TODO"""
 

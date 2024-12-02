@@ -7,6 +7,7 @@ GeneratorRegister: dict[str, ParametrizedArgs] = {
     "TestTimePeriod.test_time_period_membership": Generators.time_period_membership_cases(),
     "TestTimePeriod.test_time_period_linear_intersection_cases": Generators.time_period_linear_intersection_cases(),
     "TestTimePeriod.test_time_period_modular_intersection_cases": Generators.time_period_modular_intersection_cases(),
+    "TestTimePeriod.test_time_period_infinite_intersection_cases": Generators.time_period_infinite_intersection_cases(),
 }
 
 
