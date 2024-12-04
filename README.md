@@ -27,7 +27,7 @@
 
 ```python3
 from whenever import Time
-from whenever_time_period.time_period import LinearTimePeriod, ModularTimePeriod, InfiniteTimePeriod
+from whenever_time_period import LinearTimePeriod, ModularTimePeriod, InfiniteTimePeriod
 
 linear_period = LinearTimePeriod(Time(3), Time(10))
 modular_period = ModularTimePeriod(Time(7), Time(5))
@@ -39,31 +39,63 @@ For example:
                3    5      7    10
                |    |      |    |
 
-Linear:        |----------------)
+Linear:        [----------------)
 Modular:     >------)      [------->
 Infinite:    >------[-------------->
 """
 
 ```
 
-### Intersection between TimePeriods
+### Intersections
 
 ```python3
 >> linear_period & modular_period
-[LinearTimePeriod(Time(3), Time(5)), LinearTimePeriod(Time(7), Time(10))]
+[LinearTimePeriod[03:00:00, 05:00:00), LinearTimePeriod[07:00:00, 10:00:00)]
+
+"""
+                     3    5      7    10
+                     |    |      |    |
+
+Linear:              [----------------)
+Modular:           >------)      [------->
+
+Linear & Modular:    [----)      [----)
+
+"""
 
 # same as above
 >> modular_period & linear_period
-LinearTimePeriod(Time(7), Time(10))
+LinearTimePeriod[07:00:00, 10:00:00)
 
 >> infinite_period & linear_period
-LinearTimePeriod(Time(3), Time(10))
+LinearTimePeriod[03:00:00, 10:00:00)
+
+"""
+                     3    5      7    10
+                     |    |      |    |
+
+Infinite:          >------[-------------->
+Linear:              [----------------)
+
+Infinite & Linear:   [----------------)
+
+"""
 
 >> infinite_period & modular_period
-ModularTimePeriod(Time(7), Time(5))
+ModularTimePeriod[07:00:00, 05:00:00)
+
+"""
+                      3    5      7    10
+                      |    |      |    |
+
+Infinite:           >------[-------------->
+Modular:            >------)      [------->
+
+Infinite & Modular: >------)      [------->
+
 ```
 
-### Time Membership
+### Membership
 
 ```python3
 # TimePeriods are left-closed
@@ -75,7 +107,7 @@ True
 False
 
 # All Times are members of InfiniteTimePeriods
->> Time(7) in InfiniteTimePeriod
+>> Time(7) in infinte_period
 True
 ```
 

@@ -40,3 +40,6 @@ class AbstractTimePeriod(ABC):
     @dispatch
     def __gt__(self, other: AbstractTimePeriod) -> bool:  # noqa: F811
         return self.start_time > other.start_time
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}[{self.start_time}, {self.end_time})"

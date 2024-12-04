@@ -63,6 +63,9 @@ class LinearTimePeriod(AbstractTimePeriod):
     def __and__(self, other: InfiniteTimePeriod) -> LinearTimePeriod:  # noqa F811
         return self
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass
 class ModularTimePeriod(AbstractTimePeriod):
@@ -99,6 +102,9 @@ class ModularTimePeriod(AbstractTimePeriod):
     def __and__(self, other: InfiniteTimePeriod) -> ModularTimePeriod:  # noqa F811
         return self
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 @dataclass
 class InfiniteTimePeriod(AbstractTimePeriod):
@@ -131,3 +137,6 @@ class InfiniteTimePeriod(AbstractTimePeriod):
     @dispatch
     def __and__(self, other: InfiniteTimePeriod) -> InfiniteTimePeriod:  # noqa F811
         return other
+
+    def __repr__(self) -> str:
+        return super().__repr__()
