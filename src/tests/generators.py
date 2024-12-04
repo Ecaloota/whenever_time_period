@@ -194,6 +194,10 @@ class Generators:
               |---|
         -|   |-------
 
+        2.5. Double overlap
+          |------------|
+        -----|      |-----
+
         3. Infinite
         3.1 Infinite case
             |---|
@@ -251,6 +255,14 @@ class Generators:
                 ModularTimePeriod(Time(4), Time(1)),
                 LinearTimePeriod(Time(5), Time(8)),
             ),
+            (  # 2.5.
+                LinearTimePeriod(Time(3), Time(10)),
+                ModularTimePeriod(Time(7), Time(5)),
+                [
+                    LinearTimePeriod(Time(3), Time(5)),
+                    LinearTimePeriod(Time(7), Time(10)),
+                ],
+            ),
             (  # 3.1.
                 LinearTimePeriod(Time(5), Time(10)),
                 InfiniteTimePeriod(Time(5), Time(5)),
@@ -284,6 +296,10 @@ class Generators:
         1.4. Complete overlap
         -|   |-------
                |---|
+
+        1.5. Double overlap
+        -----|      |-----
+          |------------|
 
         2. Modular
         2.1. Complete overlap
@@ -324,6 +340,14 @@ class Generators:
                 ModularTimePeriod(Time(10), Time(5)),
                 LinearTimePeriod(Time(11), Time(13)),
                 LinearTimePeriod(Time(11), Time(13)),
+            ),
+            (  # 1.5.
+                ModularTimePeriod(Time(7), Time(5)),
+                LinearTimePeriod(Time(3), Time(10)),
+                [
+                    LinearTimePeriod(Time(3), Time(5)),
+                    LinearTimePeriod(Time(7), Time(10)),
+                ],
             ),
             (  # 2.1.
                 ModularTimePeriod(Time(10), Time(5)),

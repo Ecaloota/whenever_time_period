@@ -36,20 +36,27 @@ class LinearTimePeriod(TimePeriod):
         return None
 
     @dispatch
-    def __and__(self, other: ModularTimePeriod) -> Optional[LinearTimePeriod]:  # noqa F811
-        # two regions of possible intersection, [max(a,c), b] or [a, min(b,d)]
-        # TODO Is it always true that only one OR the other intersection will occur (if any occurs)?
+    def __and__(  # noqa F811
+        self, other: ModularTimePeriod
+    ) -> list[LinearTimePeriod] | LinearTimePeriod | None:
+        intr = []
 
         # region 1
         if max(self.start_time, other.start_time) < self.end_time:
-            return LinearTimePeriod(
-                max(self.start_time, other.start_time), self.end_time
+            intr.append(
+                LinearTimePeriod(max(self.start_time, other.start_time), self.end_time)
             )
 
         # region 2
         if self.start_time < min(self.end_time, other.end_time):
-            return LinearTimePeriod(self.start_time, min(self.end_time, other.end_time))
+            intr.append(
+                LinearTimePeriod(self.start_time, min(self.end_time, other.end_time))
+            )
 
+        if len(intr) > 1:
+            return sorted(intr)
+        elif len(intr) > 0:
+            return intr[0]
         return None
 
     @dispatch
@@ -75,7 +82,9 @@ class ModularTimePeriod(TimePeriod):
         return self.start_time <= other or other < self.end_time
 
     @dispatch
-    def __and__(self, other: LinearTimePeriod) -> Optional[LinearTimePeriod]:
+    def __and__(
+        self, other: LinearTimePeriod
+    ) -> list[LinearTimePeriod] | LinearTimePeriod | None:
         return LinearTimePeriod.__and__(other, self)
 
     @dispatch
