@@ -6,11 +6,11 @@ from typing import Optional
 from plum import dispatch
 from whenever import Time
 
-from whenever_time_period.abstract import TimePeriod
+from whenever_time_period.abstract import AbstractTimePeriod
 
 
 @dataclass
-class LinearTimePeriod(TimePeriod):
+class LinearTimePeriod(AbstractTimePeriod):
     """A LinearTimePeriod is a right-open clock interval of whenever.Time objects,
     [start_time, end_time) wherein start_time < end_time.
 
@@ -65,7 +65,7 @@ class LinearTimePeriod(TimePeriod):
 
 
 @dataclass
-class ModularTimePeriod(TimePeriod):
+class ModularTimePeriod(AbstractTimePeriod):
     """A ModularTimePeriod is a right-open clock interval of whenever.Time objects,
     [start_time, end_time) wherein end_time < start_time. Used for intervals which wrap
     around midnight.
@@ -101,7 +101,7 @@ class ModularTimePeriod(TimePeriod):
 
 
 @dataclass
-class InfiniteTimePeriod(TimePeriod):
+class InfiniteTimePeriod(AbstractTimePeriod):
     """An InfiniteTimePeriod is a right-open clock interval of whenever.Time objects,
     [start_time, end_time) wherein start_time == end_time. Used to represent intervals
     which span all possible clock times to nanosecond precision."""
