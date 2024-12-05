@@ -19,7 +19,7 @@
 
 ## Installation
 
-`# TODO Put on pypi`
+```pip install whenever-time-period```
 
 ## Quickstart
 
